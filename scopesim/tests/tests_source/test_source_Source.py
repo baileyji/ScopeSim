@@ -375,7 +375,7 @@ class TestPhotonsInRange:
                               (np.linspace(0, 1, 11)**0.5, 100,  34.931988)])
     def test_with_bandpass_and_area_returns_correct_value(self, flux, area,
                                                           expected):
-        flux = flux * u.Unit("ph s-1 m-2 um-1")
+        flux *= u.Unit("ph s-1 m-2 um-1")
         spec = SourceSpectrum(Empirical1D,
                               points=np.linspace(0.5, 2.5, 11) * u.um,
                               lookup_table=flux)
