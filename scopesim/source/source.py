@@ -572,6 +572,9 @@ class Source(SourceBase):
         return new_source
 
     def append(self, source_to_add):
+        if not isinstance(source_to_add, Source):
+            raise ValueError(f"Cannot add {type(source_to_add)} object to Source object")
+
         new_source = source_to_add.make_copy()
         # If there is no field yet, then self._meta_dicts contains a
         # reference to self.meta, which is empty. This ensures that both are
@@ -580,22 +583,20 @@ class Source(SourceBase):
         if len(self.fields) == 0:
             assert self._meta_dicts == [{}]
             self._meta_dicts = []
-        if isinstance(source_to_add, Source):
-            for field in new_source.fields:
-                if isinstance(field, Table):
-                    field["ref"] += len(self.spectra)
-                    self.fields.append(field)
 
-                elif isinstance(field, (fits.ImageHDU, fits.PrimaryHDU)):
-                    if ("SPEC_REF" in field.header and
-                        isinstance(field.header["SPEC_REF"], int)):
-                        field.header["SPEC_REF"] += len(self.spectra)
-                    self.fields.append(field)
-                self.spectra += new_source.spectra
+        for field in new_source.fields:
+            if isinstance(field, Table):
+                field["ref"] += len(self.spectra)
+                self.fields.append(field)
 
-                self._meta_dicts += source_to_add._meta_dicts
-        else:
-            raise ValueError(f"Cannot add {type(new_source)} object to Source object")
+            elif isinstance(field, (fits.ImageHDU, fits.PrimaryHDU)):
+                if ("SPEC_REF" in field.header and
+                    isinstance(field.header["SPEC_REF"], int)):
+                    field.header["SPEC_REF"] += len(self.spectra)
+                self.fields.append(field)
+            self.spectra += new_source.spectra
+
+            self._meta_dicts += source_to_add._meta_dicts
 
     def __add__(self, new_source):
         self_copy = self.make_copy()
