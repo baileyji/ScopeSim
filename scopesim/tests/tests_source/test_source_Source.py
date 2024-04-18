@@ -394,6 +394,18 @@ class TestSpectraListConverter:
                 np.array([0, 1, 1, 0]), np.array([1, 2, 3, 4]))
         assert isinstance(spec[0], SourceSpectrum)
 
+    def test_works_for_2d_arrays(self):
+        spec = source_utils.convert_to_list_of_spectra(
+            np.array([[0, 1, 1, 0], [0, 1, 1, 0]]),
+            np.array([1, 2, 3, 4]))
+        assert all(isinstance(sp, SourceSpectrum) for sp in spec)
+
+    def test_works_for_multiple_1d_arrays(self):
+        spec = source_utils.convert_to_list_of_spectra(
+            [np.array([0, 1, 1, 0]), np.array([0, 1, 1, 0])],
+            np.array([1, 2, 3, 4]))
+        assert all(isinstance(sp, SourceSpectrum) for sp in spec)
+
     def test_throws_for_array_mismatch(self):
         with pytest.raises(TypeError):
             source_utils.convert_to_list_of_spectra(
