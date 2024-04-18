@@ -472,17 +472,17 @@ class Source(SourceBase):
     def image(self, wave_min, wave_max, **kwargs):
         return self.image_in_range(wave_min, wave_max, **kwargs)
 
-    @classmethod
-    def load(cls, filename):
-        """Load :class:'.Source' object from filename"""
-        with open(filename, "rb") as fp1:
-            src = pickle.load(fp1)
-        return src
+    # @classmethod
+    # def load(cls, filename):
+    #     """Load :class:'.Source' object from filename"""
+    #     with open(filename, "rb") as fp1:
+    #         src = pickle.load(fp1)
+    #     return src
 
-    def dump(self, filename):
-        """Save to filename as a pickle"""
-        with open(filename, "wb") as fp1:
-            pickle.dump(self, fp1)
+    # def dump(self, filename):
+    #     """Save to filename as a pickle"""
+    #     with open(filename, "wb") as fp1:
+    #         pickle.dump(self, fp1)
 
     # def collapse_spectra(self, wave_min=None, wave_max=None):
     #     for spec in self.spectra:
